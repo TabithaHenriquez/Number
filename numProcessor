@@ -1,0 +1,172 @@
+import java.util.*;
+/**
+ * modify the input number and its consequent 4 numbers based on whether they're even or odd.
+ *
+ * @author Ting Liu
+ * @version 1.0
+ */
+public class numberProcessor
+{
+    /**
+     * @Input: an int number
+     * @Output: an array containing 5 elements 
+     * if the number and its 4 consequent numbers are even, 
+     * the value will be cut into half, 
+     * otherwise, the value will be doubled. 
+     * The modified values will be saved into the array
+     */
+    //a method
+    private int size = 0;
+    public int[] process(int number) {
+        int[] output = new int[5];
+
+        //if doing second way ignore the below
+        output[4] = number + 4;
+        output[3] = number + 3;
+        output[2] = number + 2;
+        output[1] = number + 1;
+        output[0] = number;
+        for (int i = 0; i < output.length; ++i){
+            //checking if the number is even, if even cut the value in half
+            if(output[i] % 2 == 0){
+                output[i] = output[i] / 2;
+            } else{
+                //else its odd, then double the value
+                output[i] = output[i] * 2;
+            }
+            //if(number % 2== 0){
+            //output[i] = number / 2;
+            //}else{
+            //output[i] = number * 2;
+            //}
+            //return output
+        }
+        return output;
+    }
+
+    public boolean remove(int[] arr, int position){
+        if(position < 0 || position > size){
+            System.out.println("position is not validated");
+            return false;
+        }
+        for(int i = position; i < size; i++){
+            results[i] = results[i + 1];
+        }
+        size--;
+        return true;
+    }
+
+    public boolean contains(int[] results, int item) {
+        int count = 0;
+        for(int r: results){
+            if(r == item){
+                return true;
+            }
+        }
+        count++;
+    }
+
+    //Binary search
+    public boolean containsB(int[] arr, int val){
+        int start = arr[0]; //variable that defines the first element in the array.
+        int end = arr.length - 1; //variable that defines the last element in the array.
+        int middle; // initializing the middle value.
+        while(start <= end){ //you keep running through the loop until start is bigger than end.
+            middle = (end + start)/2; // defining the middle value as the sum of the start and end divided by 2.
+            if(arr[middle] == val){ //if the middle value is equal to out key value (what we're looking for.
+                return true; //return true bc value is found
+            }else if (arr[middle] < val){ //
+                start = middle + 1;
+            }else {
+                end = middle + 1;
+            }
+        }
+        return false;
+    }
+
+    public boolean insert(int[] results, int val, int position){        
+        // validation
+        if(position < 0 || position > size){
+            System.out.println("position is not validated");
+            return false;
+        }
+        if(size == results.length){
+            System.out.println("reach the capacity");
+            return false;
+        }
+        for(int i = size; i > position; i--){
+            results[i] = results[i - 1];
+        }
+        results[position] = val;
+        size++;
+        return true;
+    }
+
+    public boolean sort(int[] results, int val){
+        int position = 0;
+        while(results[position] <= val && position < size){
+            position++;
+        }
+        return insert(results, val, position);
+    }
+
+    public int size(){
+        return size;
+    }
+
+    // public int[] process1(int number, int uplimit){
+    // if(number == uplimit) {
+    // return;
+    // }
+    // if(number % 2 == 0){
+    // System.out.println(number / 2);
+    // }else{
+    // System.out.println(number * 2);
+    // }
+    // process1(number + 1, uplimit);
+    // }
+    //main method
+    public static void main(String args[]) {
+        numberProcessor np = new numberProcessor();
+        int[] results = np.process(6);
+        for (int i = 0; i < results.length; i++) {
+            System.out.println("#: " + results[i]);
+        }
+        long s = System.nanoTime();
+        System.out.println("Contains 5?" + np.containsB(np.items, 5));
+        long e = System.nanoTime();
+        long elapsedTime = e - s;
+        System.out.println("time (Binary Search): " + np.contains(np.items, 5));
+
+        s = System.nanoTime();
+        System.out.println("Contains 5?" + np.containsB(np.items, 5));
+        e = System.nanoTime();
+        elapsedTime = e - s;
+        System.out.println("time (Linear Search): " + elapsedTime);
+
+        results = new int[10];
+        np.insert(results, 1 ,0);
+        np.insert(results, 2 ,1);
+        np.insert(results, 7 ,2);
+        np.insert(results, 5 ,2);
+        np.insert(results, 6 ,3);
+        int size = np.size();
+        System.out.print("size: " + size);
+        for(int i = 0; i < size; i++){
+            System.out.println("#: " + results[i]);
+        }
+
+        np.sort(results, 4);
+        np.sort(results, 3);
+        size = np.size();
+        System.out.println("-----------------");
+        for(int i = 0; i < size; i++){
+            System.out.println("#: " + results[i]);
+        }
+        
+        np.remove(results, 0);
+        for(int i = 0; i < size; i++){
+            System.out.println("#: " + results[i]);
+        }
+    }
+}
